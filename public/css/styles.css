@@ -15,28 +15,6 @@
   padding: 1rem 2rem;
 }
 
-.siteName a {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: black;
-  text-decoration: none;
-}
-
-#tools a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-}
-
-.big-site-title {
-  font-size: 3rem;
-  text-align: center;
-  margin: 0.5rem 0 1rem 0;
-  font-weight: 900;
-  color: black;
-}
-
-
 
 
 
@@ -55,18 +33,6 @@
   border-radius: 8px;
 }
 
-/* Transparent overlay box on top-left */
-/*.overlay-box {
-  position: absolute;
-  top: 10%;
-  left: 5%;
-  background-color: rgba(255, 255, 255, 0.7);*/
-  /* semi-transparent white */
-  /*padding: 1rem;
-  border-radius: 8px;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}*/
 .overlay-box {
   position: absolute;
   top: 10%;
@@ -102,6 +68,64 @@
 }
 
 
+
+
+
+
+.upgrades h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.upgrade-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-wrapper {
+  background-color: #add8e6;
+ 
+  padding: 1rem;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.image-wrapper {
+  background-color: #add8e6;
+  
+  padding: 1rem;
+  border-radius: 10px;
+  width: 250px;
+ 
+  display: flex;
+  justify-content: center;
+}
+
+.caption {
+  margin-top: 0.5rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.caption:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
 .upgrade-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -135,35 +159,10 @@ main {
   padding: 1rem;
 }
 
-.hero {
-  position: relative;
-  text-align: center;
-}
+/*.big-site-title {
+  background-color: white;
+}*/
 
-.hero img {
-  width: 100%;
-  height: auto;
-}
-
-.hero-text {
-  margin-top: 1rem;
-}
-
-.services ul {
-  padding-left: 1rem;
-}
-
-.featured .car-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.featured img {
-  width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
-}
 
 /* Responsive for larger screens */
 @media screen and (min-width: 768px) {
