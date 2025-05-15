@@ -22,6 +22,12 @@ app.set("layout", "./layouts/layout") // not at views root
 
 
 /* ***********************
+ * Middleware to serve static files
+ *************************/
+app.use(express.static("public"))
+
+
+/* ***********************
  * Routes
  *************************/
 app.use(static)
