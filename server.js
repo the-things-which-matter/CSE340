@@ -6,12 +6,12 @@
  * Require Statements
  *************************/
 const express = require("express")
+const baseController = require("./controllers/baseController")
 const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
-
-
+const utilities = require("./utilities")  // <-- added here
 
 /* ***********************
  * View engine and Templates
@@ -20,12 +20,22 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
 
-
 /* ***********************
  * Middleware to serve static files
  *************************/
 app.use(express.static("public"))
 
+/* ***********************
+ * Middleware to add nav to res.locals for all views
+ *************************/
+app.use(async (req, res, next) => {
+  try {
+    res.locals.nav = await utilities.getNav()
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
 
 /* ***********************
  * Routes
@@ -33,9 +43,11 @@ app.use(express.static("public"))
 app.use(static)
 
 // Index route
-app.get("/", function (req, res) {
-  res.render("index", { title: "Home" })
-})
+//app.get("/", function (req, res) {
+//  res.render("index", { title: "Home" })
+//})
+
+app.get("/", baseController.buildHome)
 
 /* ***********************
  * Local Server Information
