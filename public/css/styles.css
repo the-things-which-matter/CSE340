@@ -164,6 +164,37 @@ main {
 }*/
 
 
+
+
+
+nav ul.navigation {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  background-color: #333;
+  padding: 1rem;
+  margin: 0;
+}
+
+nav ul.navigation li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Responsive for larger screens */
 @media screen and (min-width: 768px) {
   .hero-text {
