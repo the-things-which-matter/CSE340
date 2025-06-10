@@ -13,12 +13,17 @@ const app = express()
 const static = require("./routes/static")
 const utilities = require("./utilities")  // <-- added here
 
+console.log("DEBUG: utilities object:", utilities)
+
 /* ***********************
  * View engine and Templates
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
+
+
+
 
 /* ***********************
  * Middleware to serve static files
