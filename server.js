@@ -54,10 +54,15 @@ app.use(static)
 //  res.render("index", { title: "Home" })
 //})
 
-app.get("/", baseController.buildHome)
+//app.get("/", baseController.buildHome)
+app.get("/", utilities.handleErrors(baseController.buildHome));
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+app.get("/force-error", (req, res, next) => {
+  next(new Error("Forced error test"));
+});
 
 /* ***********************
  * Local Server Information
@@ -75,8 +80,62 @@ app.use("/inv", inventoryRoute)
   console.log(`app listening on ${host}:${port}`)
 })*/
 
+// File Not Found Route - must be last route in list
+app.use(async (req, res, next) => {
+  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+})
+
+/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message,
+    nav
+  })
+})
+
+
+
+
+// File Not Found Route - must be last route in list
+app.use(async (req, res, next) => {
+  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+})
+
+
+/* ***********************
+ * Log statement to confirm server operation
+ *************************/
+//app.use(function (req, res) {
+//  res.status(404).render("error/error", {
+ //   title: "404 Not Found",
+//    message: "The page you requested does not exist.",
+//    nav: res.locals.nav
+//  });
+//});
+
+// 404 middleware
+//app.use(function (req, res) {
+//  res.status(404).render("error", { title: "404 Not Found", message: "The page you requested does not exist." });
+//});
+
+
+
+
+
+
+
 const port = process.env.PORT || 5000
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
+
+
+

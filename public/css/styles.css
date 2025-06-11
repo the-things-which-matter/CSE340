@@ -225,6 +225,32 @@ nav ul.navigation li a {
 
 
 
+.vehicle-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px;
+}
+
+.vehicle-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.vehicle-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+@media (min-width: 768px) {
+  .vehicle-detail {
+    flex-wrap: nowrap;
+  }
+}
+
+
+
 
 
 
