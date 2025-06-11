@@ -13,6 +13,8 @@ const app = express()
 const static = require("./routes/static")
 const utilities = require("./utilities")  // <-- added here
 
+const inventoryRoute = require("./routes/inventoryRoute")
+
 console.log("DEBUG: utilities object:", utilities)
 
 /* ***********************
@@ -53,6 +55,9 @@ app.use(static)
 //})
 
 app.get("/", baseController.buildHome)
+
+// Inventory routes
+app.use("/inv", inventoryRoute)
 
 /* ***********************
  * Local Server Information
