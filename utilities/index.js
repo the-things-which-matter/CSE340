@@ -28,40 +28,6 @@ Util.getNav = async function (req, res, next) {
 
 
 
-/* **************************************
-* Build the classification view HTML
-* ************************************ */
-Util.buildClassificationGrid = async function(data){
-  let grid
-  if(data.length > 0){
-    grid = '<ul id="inv-display">'
-    data.forEach(vehicle => { 
-      grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
-      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_thumbnail 
-      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
-      grid += '<div class="namePrice">'
-      grid += '<hr />'
-      grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
-      grid += '</h2>'
-      grid += '<span>$' 
-      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
-      grid += '</div>'
-      grid += '</li>'
-    })
-    grid += '</ul>'
-  } else { 
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
-  }
-  return grid
-}
-
-
 
 
 
@@ -100,6 +66,62 @@ Util.buildClassificationGrid = async function(data) {
   }
   return grid;
 }
+
+
+
+
+
+
+/* **************************************
+* Build the classification view HTML
+* ************************************ */
+Util.buildClassificationGrid = async function(data) {
+  let grid;
+  if (data.length > 0) {
+    grid = '<ul id="inv-display">';
+    data.forEach(vehicle => { 
+      let imageFilename = vehicle.inv_thumbnail || '';
+
+      // Clean any leading /images/ if exists (just in case)
+      if (imageFilename.startsWith('/images/')) {
+        imageFilename = imageFilename.substring('/images/'.length);
+      }
+      if (imageFilename.startsWith('vehicles/')) {
+        // Do nothing, already has vehicles/ prefix
+      } else {
+        imageFilename = `vehicles/${imageFilename}`;
+      }
+
+      const fullImageUrl = `/images/${imageFilename}`;
+
+      console.log('Processed full image URL:', fullImageUrl);
+
+      grid += '<li>';
+      grid += '<a href="/inv/detail/' + vehicle.inv_id 
+           + '" title="View ' + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">';
+      grid += '<img src="' + fullImageUrl 
+           + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model + ' on CSE Motors" />';
+      grid += '</a>';
+      grid += '<div class="namePrice">';
+      grid += '<hr />';
+      grid += '<h2>';
+      grid += '<a href="/inv/detail/' + vehicle.inv_id + '" title="View ' 
+           + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
+           + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>';
+      grid += '</h2>';
+      grid += '<span>$' + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>';
+      grid += '</div>';
+      grid += '</li>';
+    });
+    grid += '</ul>';
+  } else { 
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+  }
+  return grid;
+}
+
+
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
