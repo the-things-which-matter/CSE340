@@ -77,7 +77,7 @@ Util.buildVehicleDetail = function(vehicle) {
   // Debug: log original image path
   console.log("Original inv_image value:", imageFilename);
 
-  // Clean any leading /images/ if exists (just in case)
+  
   if (imageFilename.startsWith('/images/')) {
     imageFilename = imageFilename.substring('/images/'.length);
   }

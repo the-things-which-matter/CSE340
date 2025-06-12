@@ -11,7 +11,7 @@ const invController = require("../controllers/invController")
 router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Detail view route
-//router.get("/detail/:inv_id", invController.buildDetailView);        changed inv_id to invId
+//router.get("/detail/:inv_id", invController.buildDetailView);        changed inv_id to invId / i change it back to inv_id
 router.get("/detail/:inv_id", invController.buildDetailView);
 
 module.exports = router;
