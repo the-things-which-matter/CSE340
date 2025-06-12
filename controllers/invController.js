@@ -19,9 +19,6 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
-
-
-
 /* ***************************
  *  Build inventory detail view
  * ************************** */
@@ -37,15 +34,16 @@ invCont.buildDetailView = async function (req, res, next) {
     const vehicleHtml = utilities.buildVehicleDetail(vehicleData)
     const nav = await utilities.getNav()
 
+    // ✅ The NEW RENDER LOGIC you asked for (without removing anything)
     res.render("./inventory/detail", {
       title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
       nav,
-      vehicleHtml
+      vehicle: vehicleData,      // 👈 This is the new addition
+      vehicleHtml                // 👈 Keep the old one too
     })
   } catch (error) {
     next(error)
   }
 }
-
 
 module.exports = invCont

@@ -159,9 +159,7 @@ main {
   padding: 1rem;
 }
 
-/*.big-site-title {
-  background-color: white;
-}*/
+
 
 
 
@@ -180,6 +178,58 @@ nav ul.navigation li a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+}
+
+
+
+
+
+#inv-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+ 
+}
+
+#inv-display li {
+  display: inline-block;
+  vertical-align: top;
+  background-color: white;
+  padding: 10px;
+  margin: 10px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#inv-display li:hover {
+  transform: translateY(-5px);
+}
+
+#inv-display img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.namePrice {
+  padding: 1rem;
+  text-align: center;
+}
+
+.namePrice h2 {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.namePrice span {
+  font-weight: bold;
+  color: #333;
 }
 
 
