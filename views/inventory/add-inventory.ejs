@@ -1,0 +1,53 @@
+<main>
+    <h1>Add New Inventory</h1>
+
+    <% if (errors && errors.length> 0) { %>
+        <div class="errors">
+            <ul>
+                <% errors.forEach(function(error) { %>
+                    <li>
+                        <%= error %>
+                    </li>
+                    <% }) %>
+            </ul>
+        </div>
+        <% } %>
+
+            <form action="/inv/add-inventory" method="post">
+
+                <label for="classification_id">Classification:</label>
+                <select id="classification_id" name="classification_id" required>
+                    <option value="">-- Select Classification --</option>
+                    <% classifications.forEach(function(classification) { %>
+                        <option value="<%= classification.classification_id %>"
+                            <%=formData.classification_id==classification.classification_id ? "selected" : "" %>>
+                            <%= classification.classification_name %>
+                        </option>
+                        <% }) %>
+                </select>
+
+                <label for="inv_make">Make:</label>
+                <input type="text" id="inv_make" name="inv_make" required value="<%= formData.inv_make || '' %>">
+
+                <label for="inv_model">Model:</label>
+                <input type="text" id="inv_model" name="inv_model" required value="<%= formData.inv_model || '' %>">
+
+                <label for="inv_year">Year:</label>
+                <input type="number" id="inv_year" name="inv_year" required value="<%= formData.inv_year || '' %>">
+
+                <label for="inv_description">Description:</label>
+                <textarea id="inv_description" name="inv_description"
+                    required><%= formData.inv_description || '' %></textarea>
+
+                <label for="inv_price">Price:</label>
+                <input type="number" id="inv_price" name="inv_price" required value="<%= formData.inv_price || '' %>">
+
+                <label for="inv_miles">Miles:</label>
+                <input type="number" id="inv_miles" name="inv_miles" required value="<%= formData.inv_miles || '' %>">
+
+                <label for="inv_color">Color:</label>
+                <input type="text" id="inv_color" name="inv_color" required value="<%= formData.inv_color || '' %>">
+
+                <button type="submit">Add Inventory</button>
+            </form>
+</main>

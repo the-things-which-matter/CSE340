@@ -15,7 +15,12 @@ const utilities = require("./utilities")  // <-- added here
 
 const inventoryRoute = require("./routes/inventoryRoute")
 
+
+
 console.log("DEBUG: utilities object:", utilities)
+
+const session = require("express-session");
+const flash = require("express-flash");
 
 /* ***********************
  * View engine and Templates
@@ -35,6 +40,12 @@ app.use(express.static("public"))
 /* ***********************
  * Middleware to add nav to res.locals for all views
  *************************/
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+
 app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav()
@@ -44,10 +55,24 @@ app.use(async (req, res, next) => {
   }
 })
 
+
+
+
 /* ***********************
  * Routes
  *************************/
 app.use(static)
+
+app.use(flash());
+
+
+// Session Middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'super_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}));
 
 // Index route
 //app.get("/", function (req, res) {
@@ -126,7 +151,10 @@ app.use(async (req, res, next) => {
 //});
 
 
-
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Server Error");
+});
 
 
 

@@ -1,15 +1,15 @@
-const invModel = require("../models/inventory-model")
+const invModel = require("../models/inventory-model");
 const Util = {}
 
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function (req, res, next) {
-  let data = await invModel.getClassifications()
-  let list = "<ul>"
-  list += '<li><a href="/" title="Home page">Home</a></li>'
-  data.rows.forEach((row) => {
-    list += "<li>"
+  let data = await invModel.getClassifications();  // data is an array
+  let list = "<ul>";
+  list += '<li><a href="/" title="Home page">Home</a></li>';
+  data.forEach((row) => {  // Use data directly as an array
+    list += "<li>";
     list +=
       '<a href="/inv/type/' +
       row.classification_id +
@@ -17,11 +17,11 @@ Util.getNav = async function (req, res, next) {
       row.classification_name +
       ' vehicles">' +
       row.classification_name +
-      "</a>"
-    list += "</li>"
-  })
-  list += "</ul>"
-  return list
+      "</a>";
+    list += "</li>";
+  });
+  list += "</ul>";
+  return list;
 }
 
 /* **************************************
@@ -77,7 +77,6 @@ Util.buildVehicleDetail = function(vehicle) {
   // Debug: log original image path
   console.log("Original inv_image value:", imageFilename);
 
-  
   if (imageFilename.startsWith('/images/')) {
     imageFilename = imageFilename.substring('/images/'.length);
   }
@@ -102,6 +101,7 @@ Util.buildVehicleDetail = function(vehicle) {
 
   return html;
 }
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
@@ -109,4 +109,4 @@ Util.buildVehicleDetail = function(vehicle) {
  **************************************** */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
-module.exports = Util
+module.exports = Util;
