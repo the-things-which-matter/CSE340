@@ -12,6 +12,11 @@ invCont.buildByClassificationId = async function (req, res, next) {
     const classification_id = req.params.classificationId;
     const data = await invModel.getInventoryByClassificationId(classification_id);
     console.log("Data received from model:", data.length, "items");
+
+    if (data.length === 0) {
+      throw new Error("No inventory found for this classification");
+    }
+
     const grid = await utilities.buildClassificationGrid(data);
     const nav = await utilities.getNav();
     const className = data[0].classification_name;
@@ -63,7 +68,7 @@ invCont.buildDetailView = async function (req, res, next) {
 invCont.buildManagement = async function (req, res, next) {
   try {
     console.log("buildManagement called");
-    const nav = await utilities.getNav();  // ✅ ADDED MISSING NAV HERE
+    const nav = await utilities.getNav();
     res.render("./inventory/management", {
       title: "Inventory Management",
       nav,
@@ -97,7 +102,7 @@ invCont.showAddInventoryForm = async (req, res, next) => {
     nav,
     classifications,
     errors: null,
-    formData: {}, // Empty form data on first load
+    formData: {},
   });
 };
 
@@ -143,12 +148,14 @@ invCont.addInventory = async (req, res, next) => {
     inv_model,
     inv_year,
     inv_description,
-    inv_image,
-    inv_thumbnail,
     inv_price,
     inv_miles,
     inv_color,
   } = req.body;
+
+  // ✅ Set default images if not provided
+  const inv_image = req.body.inv_image || '/images/vehicles/no-image.png';
+  const inv_thumbnail = req.body.inv_thumbnail || '/images/vehicles/no-image.png';
 
   const errors = [];
   if (!classification_id) errors.push("Classification is required.");
