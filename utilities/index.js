@@ -1,5 +1,17 @@
 const invModel = require("../models/inventory-model");
-const Util = {}
+const Util = {};
+
+// Middleware to check account type (Admin or Employee only)
+Util.checkAccountType = (req, res, next) => {
+  const accountType = res.locals.accountType;
+
+  if (accountType === "Admin" || accountType === "Employee") {
+    next();
+  } else {
+    req.flash("notice", "You must be an employee or admin to access that page.");
+    return res.redirect("/account/login");
+  }
+};
 
 /* ************************
  * Constructs the nav HTML unordered list

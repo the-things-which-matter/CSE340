@@ -1,0 +1,16 @@
+<h1>
+    <%= title %>
+</h1>
+
+<p>Welcome, <%= firstname %>
+        <%= lastname %>!</p>
+<p>Email: <%= email %>
+</p>
+<p>Account Type: <%= accountType %>
+</p>
+
+<!-- Debug: show account ID -->
+<!-- <p>Account ID: <%= account_id %></p> -->
+
+<a href="/account/update/<%= account_id %>">Update Account Info</a> |
+<a href="/account/logout">Logout</a>

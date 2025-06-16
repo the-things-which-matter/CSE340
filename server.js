@@ -2,6 +2,7 @@
  * This server.js file is the primary file of the 
  * application. It is used to control the project.
  *******************************************/
+
 /* ***********************
  * Require Statements
  *************************/
@@ -9,28 +10,25 @@ const express = require("express")
 const baseController = require("./controllers/baseController")
 const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
+const cookieParser = require("cookie-parser")   // <--- added
+const jwt = require("jsonwebtoken")             // <--- added
 const app = express()
 const static = require("./routes/static")
-const utilities = require("./utilities")  // <-- added here
-
+const utilities = require("./utilities") 
 const inventoryRoute = require("./routes/inventoryRoute")
-
-
-
-console.log("DEBUG: utilities object:", utilities)
+const accountRoute = require('./routes/accountRoute')
 
 const session = require("express-session");
 const flash = require("express-flash");
+const checkLogin = require('./middleware/checkLogin');
+
 
 /* ***********************
  * View engine and Templates
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
-
-
-
+app.set("layout", "./layouts/layout")
 
 /* ***********************
  * Middleware to serve static files
@@ -38,14 +36,56 @@ app.set("layout", "./layouts/layout") // not at views root
 app.use(express.static("public"))
 
 /* ***********************
+ * Middleware to parse cookies
+ *************************/
+app.use(cookieParser())  // <--- must come before you read cookies
+
+app.use(checkLogin);
+/* ***********************
+ * Session and Flash Middleware
+ *************************/
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'super_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
+
+app.use(flash())
+
+/* ***********************
+ * Middleware for form data parsing
+ *************************/
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+/* ***********************
+ * Middleware to set login info from JWT cookie
+ *************************/
+app.use((req, res, next) => {
+  const token = req.cookies?.jwt;
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      res.locals.loggedin = true;
+      res.locals.firstname = decoded.account_firstname;
+      res.locals.accountType = decoded.account_type;
+      res.locals.accountId = decoded.account_id; // in case you need it
+    } catch (err) {
+      // token invalid or expired
+      res.locals.loggedin = false;
+      // Optionally clear cookie if invalid token:
+      // res.clearCookie('jwt');
+    }
+  } else {
+    res.locals.loggedin = false;
+  }
+  next();
+});
+
+/* ***********************
  * Middleware to add nav to res.locals for all views
  *************************/
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-
-
 app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav()
@@ -55,115 +95,46 @@ app.use(async (req, res, next) => {
   }
 })
 
-
-
-
 /* ***********************
  * Routes
  *************************/
 app.use(static)
-
-app.use(flash());
-
-
-// Session Middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'super_secret_key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60000 }
-}));
-
-// Index route
-//app.get("/", function (req, res) {
-//  res.render("index", { title: "Home" })
-//})
-
-//app.get("/", baseController.buildHome)
-app.get("/", utilities.handleErrors(baseController.buildHome));
-
-// Inventory routes
+app.use("/account", accountRoute)
 app.use("/inv", inventoryRoute)
 
+// Home route
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
+// Force error route (for testing error handling)
 app.get("/force-error", (req, res, next) => {
-  next(new Error("Forced error test"));
-});
-
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-//const port = process.env.PORT
-//const host = process.env.HOST
-
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-
-/*removed this , deploying issue*/
-/*app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})*/
-
-// File Not Found Route - must be last route in list
-app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+  next(new Error("Forced error test"))
 })
 
 /* ***********************
-* Express Error Handler
-* Place after all other middleware
-*************************/
+ * File Not Found Route (404)
+ *************************/
+app.use(async (req, res, next) => {
+  next({ status: 404, message: 'Sorry, we appear to have lost that page.' })
+})
+
+/* ***********************
+ * Error Handler Middleware (500)
+ *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
-  res.render("errors/error", {
+  let message = err.status == 404 ? err.message : 'Oh no! There was a crash. Maybe try a different route?'
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || 'Server Error',
     message,
     nav
   })
 })
 
-
-
-
-// File Not Found Route - must be last route in list
-app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
-})
-
-
 /* ***********************
- * Log statement to confirm server operation
+ * Start Server
  *************************/
-//app.use(function (req, res) {
-//  res.status(404).render("error/error", {
- //   title: "404 Not Found",
-//    message: "The page you requested does not exist.",
-//    nav: res.locals.nav
-//  });
-//});
-
-// 404 middleware
-//app.use(function (req, res) {
-//  res.status(404).render("error", { title: "404 Not Found", message: "The page you requested does not exist." });
-//});
-
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Server Error");
-});
-
-
-
-
 const port = process.env.PORT || 5000
-
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
-
-
-

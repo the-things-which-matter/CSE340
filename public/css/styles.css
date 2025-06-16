@@ -172,12 +172,14 @@ nav ul.navigation {
   background-color: #333;
   padding: 1rem;
   margin: 0;
+ 
 }
 
 nav ul.navigation li a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  margin-top: -40px;
 }
 
 
@@ -245,10 +247,10 @@ nav ul.navigation li a {
   margin: 20px auto;
   display: flex;
   flex-direction: column;
-  /* stack vertically */
+ 
   gap: 15px;
   color: white;
-  /* text color */
+
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
@@ -299,6 +301,104 @@ nav ul.navigation li a {
 
 
 
+
+
+
+
+
+
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.siteName a {
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+#tools a {
+  margin-left: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #007bff;
+}
+
+
+
+
+
+
+
+
+
+.siteName a {
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+#tools a {
+  margin-left: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #007bff;
+}
+
+
+
+
+
+
+
+
+
+
+/* The entire top header has blue background */
+#top-header {
+  background-color: #004080;
+  /* Your blue */
+  padding: 20px 0;
+  /* Some vertical padding */
+}
+
+/* The inner container (white box) */
+.header-container {
+  background-color: white;
+  width: 100%;
+  
+  padding: 15px 30px;
+  border-radius: 0;
+  
+  box-shadow: none;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+/* Site name styling */
+.siteName a {
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+/* Tools section (My Account, Welcome, Logout) */
+#tools a {
+  margin-left: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #007BFF;
+}
 
 
 
@@ -381,6 +481,9 @@ nav li a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  position: relative;
+    top: -8px;
+   
 }
 
 nav li a:hover {
@@ -395,3 +498,6 @@ footer {
   padding: 1rem;
   font-size: 0.9rem;
 }
+
+
+

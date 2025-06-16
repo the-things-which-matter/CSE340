@@ -1,0 +1,22 @@
+<h2>Login</h2>
+
+<% if (errorMessage) { %>
+    <p class="error">
+        <%= errorMessage %>
+    </p>
+    <% } %>
+
+        <form action="/account/login" method="POST" novalidate>
+            <div class="form-group">
+                <label for="account_email">Email:</label>
+                <input type="email" id="account_email" name="account_email"
+                    value="<%= account_email ? account_email : '' %>" required />
+            </div>
+
+            <div class="form-group">
+                <label for="account_password">Password:</label>
+                <input type="password" id="account_password" name="account_password" required />
+            </div>
+
+            <button type="submit">Log In</button>
+        </form>
