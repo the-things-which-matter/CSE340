@@ -12,7 +12,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+ 
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -313,6 +315,8 @@ nav ul.navigation li a {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
+ 
+  padding: 0 2rem;
 }
 
 .siteName a {
@@ -320,6 +324,7 @@ nav ul.navigation li a {
   font-weight: bold;
   text-decoration: none;
   color: #333;
+  margin-left: 2rem;
 }
 
 #tools a {
@@ -327,9 +332,11 @@ nav ul.navigation li a {
   font-weight: bold;
   text-decoration: none;
   color: #007bff;
+  margin-left: 1rem;
 }
 
-
+#tools {
+  margin-right: 2rem;}
 
 
 
