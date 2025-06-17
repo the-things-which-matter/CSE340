@@ -363,9 +363,7 @@ nav ul.navigation li a {
 /* The entire top header has blue background */
 #top-header {
   background-color: #004080;
-  /* Your blue */
   padding: 20px 0;
-  /* Some vertical padding */
 }
 
 /* The inner container (white box) */
@@ -401,6 +399,69 @@ nav ul.navigation li a {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+/*Account management*/
+.login-form-container {
+  display: flex;
+  justify-content: center;
+
+}
+
+/* Style the form itself */
+.login-form-container form {
+  background-color: #cce0ff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.login {
+  text-align: center;
+}
+
+
+
+
+/*update account information*/
+.form-container {
+  background-color: #cce0ff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+ 
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-container h2 {
+  margin-bottom: 0.5rem;
+}
+
+.update {
+  text-align: center;
+}
 
 
 

@@ -15,6 +15,7 @@ router.get("/my-account", checkLogin, requireAuth, accountsController.buildAccou
 
 router.get("/update/:accountId", checkLogin, requireAuth, accountsController.buildAccountUpdate);
 router.post("/update", checkLogin, requireAuth, accountsController.updateAccountInfo);
+
 router.post("/update-password", checkLogin, requireAuth, accountsController.updatePassword);
 
 module.exports = router;

@@ -272,3 +272,23 @@ WHERE inv_make = 'GM' AND inv_model = 'Hummer';
 UPDATE inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+
+
+
+
+
+
+
+INSERT INTO public.account (
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_password,
+    account_type
+) VALUES (
+    'Brima',
+    'Young',
+    'brimayoung@gmail.com',
+    '$2b$10$Bd0U4pmZ/Cs9Onyx/IZXeO4sHru1G9GV9hycFtfJTZAC4ISt1AiJ.',
+    'Client'
+);

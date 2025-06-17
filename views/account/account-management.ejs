@@ -2,15 +2,30 @@
     <%= title %>
 </h1>
 
-<p>Welcome, <%= firstname %>
-        <%= lastname %>!</p>
-<p>Email: <%= email %>
-</p>
-<p>Account Type: <%= accountType %>
-</p>
+<!-- Greet the user based on account type -->
+<% if (accountType==='Client' ) { %>
+    <h2>Welcome <%= firstname %>
+    </h2>
+    <% } else { %>
+        <h2>Welcome <%= firstname %>
+        </h2>
+        <% } %>
 
-<!-- Debug: show account ID -->
-<!-- <p>Account ID: <%= account_id %></p> -->
+            <p>Welcome, <%= firstname %>
+                    <%= lastname %>!</p>
+            <p>Email: <%= email %>
+            </p>
+            <p>Account Type: <%= accountType %>
+            </p>
 
-<a href="/account/update/<%= account_id %>">Update Account Info</a> |
-<a href="/account/logout">Logout</a>
+          
+            <p><a href="/account/update/<%= account_id %>">Update Account Information</a></p>
+
+            <!-- Show inventory section only for Admin/Employee -->
+            <% if (accountType==='Admin' || accountType==='Employee' ) { %>
+                <h3>Inventory Management</h3>
+                <p><a href="/inv/">Manage Inventory</a></p>
+                <% } %>
+
+                    <!-- Logout link -->
+                    <p><a href="/account/logout">Logout</a></p>

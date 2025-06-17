@@ -16,7 +16,7 @@ async function showLogin(req, res) {
 async function loginAccount(req, res) {
   const { account_email, account_password } = req.body;
   console.log("Login attempt for email:", account_email);
-  
+
   const accountData = await accountModel.getAccountByEmail(account_email);
   console.log("Account data found:", accountData);
 
@@ -28,6 +28,10 @@ async function loginAccount(req, res) {
       account_email
     });
   }
+
+  // Add debugging for exact input and hash
+  console.log(`Password entered (raw): "${account_password}"`);
+  console.log(`Stored password hash: "${accountData.account_password}"`);
 
   const passwordMatch = await accountModel.comparePassword(account_password, accountData.account_password);
   console.log("Password match result:", passwordMatch);
@@ -55,10 +59,10 @@ async function loginAccount(req, res) {
 
   // Store token in cookie with secure options
   res.cookie("jwt", token, {
-    httpOnly: true, 
-    secure: process.env.NODE_ENV === "production", // true only in production
-    sameSite: "strict", 
-    maxAge: 1000 * 60 * 60 // 1 hour
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", 
+    sameSite: "strict",
+    maxAge: 1000 * 60 * 60 
   });
   console.log("JWT token stored in cookie");
 
