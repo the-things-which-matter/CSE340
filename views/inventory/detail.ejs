@@ -1,3 +1,11 @@
 <main>
     <%- vehicleHtml %>
-</main>
+
+        <% if (loggedin) { %>
+            <form action="/saved/save/<%= vehicle.inv_id %>" method="POST">
+                <button type="submit">Save this Vehicle</button>
+            </form>
+            <% } else { %>
+                <p><a href="/account/login">Log in</a> to save this vehicle.</p>
+                <% } %>
+                    </main>

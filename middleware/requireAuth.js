@@ -1,10 +1,11 @@
-function requireAuth(req, res, next) {
-    if (!res.locals.loggedin) {
-      return res.redirect("/account/login");
-    }
-    next();
-}
-  
+// middleware/requireAuth.js
 
-  
-  module.exports = requireAuth;
+function requireAuth(req, res, next) {
+  if (res.locals.loggedin) {
+    return next();
+  } else {
+    return res.redirect('/account/login');
+  }
+}
+
+module.exports = requireAuth;

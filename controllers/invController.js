@@ -153,7 +153,7 @@ invCont.addInventory = async (req, res, next) => {
     inv_color,
   } = req.body;
 
-  // ✅ Set default images if not provided
+  // Set default images if not provided
   const inv_image = req.body.inv_image || '/images/vehicles/no-image.png';
   const inv_thumbnail = req.body.inv_thumbnail || '/images/vehicles/no-image.png';
 

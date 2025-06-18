@@ -12,15 +12,18 @@ const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const app = express();
-const static = require("./routes/static");
-const utilities = require("./utilities");
-const inventoryRoute = require("./routes/inventoryRoute");
-const accountRoute = require('./routes/accountRoute');
-
 const session = require("express-session");
 const flash = require("express-flash");
-const checkLogin = require('./middleware/checkLogin');
+
+const app = express();
+
+const static = require("./routes/static");
+const inventoryRoute = require("./routes/inventoryRoute");
+const accountRoute = require("./routes/accountRoute");
+const savedRoutes = require("./routes/savedRoute");
+
+const utilities = require("./utilities");
+const checkLogin = require("./middleware/checkLogin");
 
 /* ***********************
  * View engine and Templates
@@ -37,56 +40,35 @@ app.use(express.static("public"));
 /* ***********************
  * Middleware to parse cookies
  *************************/
-app.use(cookieParser());  
+app.use(cookieParser());
 
 /* ***********************
- * Middleware to check login (set locals)
+ * Middleware to check login and set res.locals
+ * ONLY this middleware decodes JWT and sets loggedin/account_id
  *************************/
 app.use(checkLogin);
 
 /* ***********************
  * Session and Flash Middleware
  *************************/
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'super_secret_key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60000 }
-}));
-
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "super_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 30 * 60 * 1000 }, // 30 minutes
+  })
+);
 app.use(flash());
 
 /* ***********************
- * Middleware for form data parsing
+ * Middleware to parse incoming request data
  *************************/
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /* ***********************
- * Middleware to set login info from JWT cookie
- *************************/
-app.use((req, res, next) => {
-  const token = req.cookies?.jwt;
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      res.locals.loggedin = true;
-      res.locals.firstname = decoded.account_firstname;
-      res.locals.accountType = decoded.account_type;
-      res.locals.accountId = decoded.account_id; 
-    } catch (err) {
-      // token invalid or expired
-      res.locals.loggedin = false;
-     
-    }
-  } else {
-    res.locals.loggedin = false;
-  }
-  next();
-});
-
-/* ***********************
- * Middleware to add nav to res.locals for all views
+ * Add nav to res.locals for all views
  *************************/
 app.use(async (req, res, next) => {
   try {
@@ -101,35 +83,39 @@ app.use(async (req, res, next) => {
  * Routes
  *************************/
 app.use(static);
-app.use("/account", accountRoute); 
+app.use("/account", accountRoute);
 app.use("/inv", inventoryRoute);
+app.use("/saved", savedRoutes); // handles /saved/save/:inv_id and /saved/my-saved
 
-// Home route
+/* Home Route */
 app.get("/", utilities.handleErrors(baseController.buildHome));
 
-// Force error route (for testing error handling)
+/* Force Error Route (for testing) */
 app.get("/force-error", (req, res, next) => {
   next(new Error("Forced error test"));
 });
 
 /* ***********************
- * File Not Found Route (404)
+ * 404 Error Handler
  *************************/
 app.use(async (req, res, next) => {
-  next({ status: 404, message: 'Sorry, we appear to have lost that page.' });
+  next({ status: 404, message: "Sorry, we appear to have lost that page." });
 });
 
 /* ***********************
- * Error Handler Middleware (500)
+ * Global Error Handler
  *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav();
+  const nav = await utilities.getNav();
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  let message = err.status == 404 ? err.message : 'Oh no! There was a crash. Maybe try a different route?';
+  const message =
+    err.status === 404
+      ? err.message
+      : "Oh no! There was a crash. Maybe try a different route?";
   res.status(err.status || 500).render("errors/error", {
-    title: err.status || 'Server Error',
+    title: err.status || "Server Error",
     message,
-    nav
+    nav,
   });
 });
 
